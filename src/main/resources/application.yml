@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: offerGen
+  datasource:
+    url: jdbc:h2:mem:offerMaker
+    username: username
+    password: password
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  data:
+    mongodb:
+      uri:  
+    
+server:
+  servlet:
+    context-path: /offers
+  port: 8080
