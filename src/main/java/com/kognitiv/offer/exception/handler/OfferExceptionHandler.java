@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.kognitiv.offer.beans.ErrorBean;
 import com.kognitiv.offer.constants.ErrorConstants;
@@ -28,10 +27,7 @@ public class OfferExceptionHandler {
 		ErrorBean er = new ErrorBean();
 		ResponseEntity<ErrorBean> response = null;
 		er.setMessage(e.getMessage());
-		if (e.getMessage().equalsIgnoreCase(ErrorConstants.OFFER_NOT_FOUND)) {
-			er.setCode("411");
-			response = new ResponseEntity<>(er, HttpStatus.NOT_FOUND);
-		} else if (e.getMessage().equalsIgnoreCase(ErrorConstants.ADMIN_NOT_ALLOWED)) {
+		if (e.getMessage().equalsIgnoreCase(ErrorConstants.ADMIN_NOT_ALLOWED)) {
 			er.setCode("412");
 			response = new ResponseEntity<>(er, HttpStatus.FORBIDDEN);
 		} else if (e.getMessage().equalsIgnoreCase(ErrorConstants.OFFER_EMPTY)) {
@@ -65,6 +61,10 @@ public class OfferExceptionHandler {
 		ErrorBean er = new ErrorBean();
 		er.setMessage(e.getMessage());
 		ResponseEntity<ErrorBean> response = null;
+		if(e.getMessage().equalsIgnoreCase(ErrorConstants.OFFER_NOT_FOUND)) {
+			er.setCode("411");
+			response = new ResponseEntity<>(er, HttpStatus.NOT_FOUND);
+		}
 		return response;
 	}
 

@@ -1,13 +1,15 @@
 package com.kognitiv.offer.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.kognitiv.offer.beans.OfferResponse;
 import com.kognitiv.offer.beans.request.OfferRequest;
 import com.kognitiv.offer.beans.response.Photos;
+import com.kognitiv.offer.config.CacheableConfig;
 import com.kognitiv.offer.constants.ErrorConstants;
 import com.kognitiv.offer.constants.OfferGeneratorConstants;
 import com.kognitiv.offer.entity.Offers;
@@ -36,12 +39,16 @@ public class OfferManager {
 
 	@Autowired
 	RestTemplate restTemplate;
+	
+	@Autowired
+	CacheableConfig cache;
 
 	private static final Logger LOG = LoggerFactory.getLogger(OfferManager.class);
 
 	public OfferResponse getOffer(String username) throws OfferInvalidException, OfferGeneratorException {
 
 		Optional<Users> loggedIn = userRepo.findByUsername(username);
+		LOG.info("user is :: {}" , loggedIn.get().getUsername());
 		// Assuming the user must exist since this is a prototype
 		if (loggedIn.get().getOfferId() == null) {
 			throw new OfferGeneratorException(ErrorConstants.OFFER_NOT_FOUND);
@@ -72,15 +79,20 @@ public class OfferManager {
 		try {
 			Optional<Users> user = userRepo.findByUsername(request.getOffer().getName());
 			if (user.isPresent()) {
+				LOG.info("For username :: {}" , user.get().getUsername());
 				Offers offer = new Offers();
 				offer.setLocation(request.getOffer().getLocation());
 				offer.setName(request.getOffer().getName());
 				offer.setValidFrom(request.getOffer().getValidFrom());
 				offer.setValidTo(request.getOffer().getValidTill());
 				setImage(offer);
-				offer = repo.save(offer);
-				user.get().setOfferId(offer.getId());
-				updateInUserTable(user.get());
+				try {
+					offer = repo.save(offer);
+					user.get().setOfferId(offer.getId());
+					updateInUserTable(user.get());
+				} catch (Exception e) {
+					throw new OfferGeneratorRuntimeException(ErrorConstants.OFFER_NOT_SAVED);
+				}
 				LOG.info("id :: {}", offer.getId());
 				return OfferGeneratorConstants.POSTED_SUCCESSFULLY;
 			} else {
@@ -91,21 +103,17 @@ public class OfferManager {
 			throw ie;
 		} catch (OfferGeneratorRuntimeException e) {
 			LOG.error("Exception occured while trying to input offer into db :: {}", request.getOffer().getName(), e);
-			throw new OfferGeneratorRuntimeException(ErrorConstants.OFFER_NOT_SAVED);
+			throw e;
 		}
 	}
 
 	private void updateInUserTable(Users user) {
-		userRepo.save(user);
+		user = userRepo.save(user);
+		LOG.info("user id after update in post :: {}" , user.getUserId());
 	}
 
 	private void setImage(Offers offer) {
-		// TODO: implement cache and store this static value. Need not call the api for each call.
-		ResponseEntity<Photos[]> response = restTemplate.getForEntity("https://jsonplaceholder.typicode.com/photos",
-				Photos[].class);
-		offer.setImages(response.getBody()[new Random().nextInt(response.getBody().length)].getUrl());
+		offer.setImages(cache.getPhotos()[new Random().nextInt(cache.getPhotos().length)].getUrl());
 	}
-	
-	
 
 }

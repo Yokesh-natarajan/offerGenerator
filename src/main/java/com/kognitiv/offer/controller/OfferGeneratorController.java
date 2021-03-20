@@ -30,18 +30,17 @@ public class OfferGeneratorController {
 		if(user.getUsername().equalsIgnoreCase("ADMIN")) {
 			throw new OfferInvalidException(ErrorConstants.ADMIN_NOT_ALLOWED);
 		}
-		offerManager.getOffer(user.getUsername());
-		return new OfferResponse();
+		return offerManager.getOffer(user.getUsername());
 	}
 
 	@PostMapping("collect/offer")
 	public String insertOffer(@RequestBody OfferRequest request , HttpServletResponse response) throws OfferInvalidException {
-		// TODO: implement logic for inserting values into db
+		// TODO: empty obj fix still in way
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(!user.getUsername().equalsIgnoreCase("ADMIN")) {
 			throw new OfferInvalidException(ErrorConstants.USERS_NOT_ALLOWED);
 		}
-		if (ObjectUtils.isEmpty(request)) {
+		if (ObjectUtils.isEmpty(request) || ObjectUtils.isEmpty(request.getOffer())) {
 			throw new OfferInvalidException(ErrorConstants.OFFER_EMPTY);
 		}
 		String result = offerManager.postOffer(request);
