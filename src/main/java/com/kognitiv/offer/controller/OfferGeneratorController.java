@@ -35,7 +35,6 @@ public class OfferGeneratorController {
 
 	@PostMapping("collect/offer")
 	public String insertOffer(@RequestBody OfferRequest request , HttpServletResponse response) throws OfferInvalidException {
-		// TODO: empty obj fix still in way
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(!user.getUsername().equalsIgnoreCase("ADMIN")) {
 			throw new OfferInvalidException(ErrorConstants.USERS_NOT_ALLOWED);

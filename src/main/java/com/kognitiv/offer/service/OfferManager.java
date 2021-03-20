@@ -6,17 +6,11 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import com.kognitiv.offer.beans.OfferResponse;
 import com.kognitiv.offer.beans.request.OfferRequest;
-import com.kognitiv.offer.beans.response.Photos;
 import com.kognitiv.offer.config.CacheableConfig;
 import com.kognitiv.offer.constants.ErrorConstants;
 import com.kognitiv.offer.constants.OfferGeneratorConstants;
@@ -38,9 +32,6 @@ public class OfferManager {
 	UserRepository userRepo;
 
 	@Autowired
-	RestTemplate restTemplate;
-	
-	@Autowired
 	CacheableConfig cache;
 
 	private static final Logger LOG = LoggerFactory.getLogger(OfferManager.class);
@@ -49,14 +40,13 @@ public class OfferManager {
 
 		Optional<Users> loggedIn = userRepo.findByUsername(username);
 		LOG.info("user is :: {}" , loggedIn.get().getUsername());
+		
 		// Assuming the user must exist since this is a prototype
 		if (loggedIn.get().getOfferId() == null) {
 			throw new OfferGeneratorException(ErrorConstants.OFFER_NOT_FOUND);
 		}
 
 		Optional<Offers> offer = repo.findById(loggedIn.get().getOfferId());
-
-		// repo.findAll().forEach(x -> System.out.println(x.getId()));
 
 		OfferResponse offerResponse = null;
 
