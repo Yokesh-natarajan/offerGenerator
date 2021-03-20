@@ -1,24 +1,52 @@
 package com.kognitiv.offer.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kognitiv.offer.beans.OfferResponse;
+import com.kognitiv.offer.beans.request.OfferRequest;
+import com.kognitiv.offer.constants.ErrorConstants;
+import com.kognitiv.offer.exception.OfferGeneratorException;
+import com.kognitiv.offer.exception.OfferInvalidException;
+import com.kognitiv.offer.service.OfferManager;
 
 @RestController
 public class OfferGeneratorController {
-	
-	@GetMapping("/collect/offer")
-	public OfferResponse viewOffer() {
-		//TODO: implement logic for getting value from db wrt user
+
+	@Autowired
+	OfferManager offerManager;
+
+	@GetMapping("collect/offer")
+	public OfferResponse viewOffer() throws OfferInvalidException, OfferGeneratorException {
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(user.getUsername().equalsIgnoreCase("ADMIN")) {
+			throw new OfferInvalidException(ErrorConstants.ADMIN_NOT_ALLOWED);
+		}
+		offerManager.getOffer(user.getUsername());
 		return new OfferResponse();
 	}
-	
-	@PostMapping("/collect/offer")
-	public Object insertOffer() {
-		//TODO: implement logic for inserting values into db
-		return new Object();
+
+	@PostMapping("collect/offer")
+	public String insertOffer(@RequestBody OfferRequest request , HttpServletResponse response) throws OfferInvalidException {
+		// TODO: implement logic for inserting values into db
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(!user.getUsername().equalsIgnoreCase("ADMIN")) {
+			throw new OfferInvalidException(ErrorConstants.USERS_NOT_ALLOWED);
+		}
+		if (ObjectUtils.isEmpty(request)) {
+			throw new OfferInvalidException(ErrorConstants.OFFER_EMPTY);
+		}
+		String result = offerManager.postOffer(request);
+		response.setStatus(201);
+		return result;
 	}
 
 }
