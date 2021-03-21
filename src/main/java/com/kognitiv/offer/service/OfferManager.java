@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kognitiv.offer.beans.OfferResponse;
-import com.kognitiv.offer.beans.request.OfferRequest;
+import com.kognitiv.offer.beans.model.request.OfferRequest;
+import com.kognitiv.offer.beans.model.response.OfferResponse;
 import com.kognitiv.offer.config.CacheableConfig;
 import com.kognitiv.offer.constants.ErrorConstants;
 import com.kognitiv.offer.constants.OfferGeneratorConstants;

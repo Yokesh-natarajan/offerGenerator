@@ -1,4 +1,4 @@
-package com.kognitiv.offer.beans.request;
+package com.kognitiv.offer.beans.model.request;
 
 public class OfferRequest {
 	

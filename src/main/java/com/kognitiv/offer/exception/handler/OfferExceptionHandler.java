@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.kognitiv.offer.beans.ErrorBean;
+import com.kognitiv.offer.beans.model.response.ErrorBean;
 import com.kognitiv.offer.constants.ErrorConstants;
 import com.kognitiv.offer.exception.OfferGeneratorException;
 import com.kognitiv.offer.exception.OfferGeneratorRuntimeException;

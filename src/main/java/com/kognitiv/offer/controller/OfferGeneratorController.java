@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kognitiv.offer.beans.OfferResponse;
-import com.kognitiv.offer.beans.request.OfferRequest;
+import com.kognitiv.offer.beans.model.request.OfferRequest;
+import com.kognitiv.offer.beans.model.response.OfferResponse;
 import com.kognitiv.offer.constants.ErrorConstants;
 import com.kognitiv.offer.exception.OfferGeneratorException;
 import com.kognitiv.offer.exception.OfferInvalidException;

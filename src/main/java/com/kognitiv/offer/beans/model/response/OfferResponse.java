@@ -1,4 +1,4 @@
-package com.kognitiv.offer.beans;
+package com.kognitiv.offer.beans.model.response;
 
 import java.util.Date;
 

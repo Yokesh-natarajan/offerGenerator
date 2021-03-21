@@ -1,4 +1,4 @@
-package com.kognitiv.offer.beans;
+package com.kognitiv.offer.beans.model.response;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
