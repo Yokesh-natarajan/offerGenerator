@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import com.kognitiv.offer.beans.model.request.OfferRequest;
 import com.kognitiv.offer.beans.model.response.OfferResponse;
@@ -70,6 +71,10 @@ public class OfferManager {
 			Optional<Users> user = userRepo.findByUsername(request.getOffer().getName());
 			if (user.isPresent()) {
 				LOG.info("For username :: {}" , user.get().getUsername());
+				Optional<Offers> exist = repo.findByName(request.getOffer().getName());
+				if(exist.isPresent() && !ObjectUtils.isEmpty(exist.get())) {
+					throw new OfferInvalidException(ErrorConstants.OFFER_ALREADY_EXIST);
+				}
 				Offers offer = new Offers();
 				offer.setLocation(request.getOffer().getLocation());
 				offer.setName(request.getOffer().getName());
@@ -89,7 +94,7 @@ public class OfferManager {
 				throw new OfferInvalidException(ErrorConstants.USER_NOT_PRESENT);
 			}
 		} catch (OfferInvalidException ie) {
-			LOG.error("the user does not exist :: {}", ie.getMessage());
+			LOG.error("the user does not exist || nultiple exists :: {}", ie.getMessage());
 			throw ie;
 		} catch (OfferGeneratorRuntimeException e) {
 			LOG.error("Exception occured while trying to input offer into db :: {}", request.getOffer().getName(), e);

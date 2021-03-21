@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
@@ -58,13 +59,23 @@ public class BoilerPlateConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
           .authorizeRequests()
-          .anyRequest()
+          .antMatchers("/collect/offer*")
           .authenticated()
           .and()
           .httpBasic()
           .and()
-          .rememberMe()
-          .tokenValiditySeconds(60);
+          .sessionManagement()
+          .maximumSessions(1)
+          .maxSessionsPreventsLogin(true)
+          .and()
+          .and()
+          .logout()
+          .invalidateHttpSession(true)
+          .deleteCookies("JSESSIONID")
+          .and()
+          .authorizeRequests()
+          .antMatchers("/v2/api-docs")
+          .permitAll();
     }
 
 }

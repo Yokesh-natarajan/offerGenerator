@@ -12,5 +12,6 @@ public class ErrorConstants {
 	public static final String ADMIN_NOT_ALLOWED = "You are supposed to offer them , not collect them";
 	public static final String USER_NOT_PRESENT = "The user you are trying to present an offer does not exist./n Kindly try with his/her username";
 	public static final String USERS_NOT_ALLOWED = "You donot have the authorization to access this service";
+	public static final String OFFER_ALREADY_EXIST = "The user for whom you are trying to offer already has one";
 	
 }

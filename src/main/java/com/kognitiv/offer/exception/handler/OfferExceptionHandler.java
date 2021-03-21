@@ -39,6 +39,9 @@ public class OfferExceptionHandler {
 		} else if (e.getMessage().equalsIgnoreCase(ErrorConstants.USERS_NOT_ALLOWED)) {
 			er.setCode("421");
 			response = new ResponseEntity<>(er, HttpStatus.FORBIDDEN);
+		} else if(e.getMessage().equalsIgnoreCase(ErrorConstants.OFFER_ALREADY_EXIST)) {
+			er.setCode("424");
+			response = new ResponseEntity<>(er, HttpStatus.NOT_ACCEPTABLE);
 		}
 		return response;
 	}

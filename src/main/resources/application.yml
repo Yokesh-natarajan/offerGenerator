@@ -14,5 +14,7 @@ spring:
     
 server:
   servlet:
+    session:
+      timeout: 1
     context-path: /
   port: 8080
