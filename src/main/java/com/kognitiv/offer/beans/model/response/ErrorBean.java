@@ -41,7 +41,10 @@ public class ErrorBean {
 	public void setMeta(String meta) {
 		this.meta = meta;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "ErrorBean [message=" + message + ", code=" + code + ", meta=" + meta + "]";
+	}
+	
 }

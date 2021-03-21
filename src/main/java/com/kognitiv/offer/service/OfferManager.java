@@ -59,7 +59,7 @@ public class OfferManager {
 			offerResponse.setValidTo(offer.get().getValidTo());
 		} else {
 			LOG.error("Exception no record found for :: {}", loggedIn.get().getOfferId());
-			throw new OfferInvalidException(ErrorConstants.OFFER_NOT_FOUND);
+			throw new OfferGeneratorException(ErrorConstants.OFFER_NOT_FOUND);
 		}
 
 		return offerResponse;
@@ -71,8 +71,7 @@ public class OfferManager {
 			Optional<Users> user = userRepo.findByUsername(request.getOffer().getName());
 			if (user.isPresent()) {
 				LOG.info("For username :: {}" , user.get().getUsername());
-				Optional<Offers> exist = repo.findByName(request.getOffer().getName());
-				if(exist.isPresent() && !ObjectUtils.isEmpty(exist.get())) {
+				if(!ObjectUtils.isEmpty(user.get().getOfferId())) {
 					throw new OfferInvalidException(ErrorConstants.OFFER_ALREADY_EXIST);
 				}
 				Offers offer = new Offers();

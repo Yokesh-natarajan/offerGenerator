@@ -11,5 +11,10 @@ public class OfferRequest {
 	public void setOffer(Offer offer) {
 		this.offer = offer;
 	}
+
+	@Override
+	public String toString() {
+		return "OfferRequest [offer=" + offer + "]";
+	}
 	
 }

@@ -43,5 +43,11 @@ public class Offer {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+
+	@Override
+	public String toString() {
+		return "Offer [name=" + name + ", validFrom=" + validFrom + ", validTill=" + validTill + ", location="
+				+ location + "]";
+	}
 	
 }
