@@ -3,8 +3,10 @@ package com.kognitiv.offer.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -17,7 +19,15 @@ public class SwaggerConfig {
           .select()                                  
           .apis(RequestHandlerSelectors.any())              
           .paths(PathSelectors.ant("/collect/offer*"))                          
-          .build();                                           
+          .build().apiInfo(apiInfo());                                           
     }
+
+	private ApiInfo apiInfo() {
+		return new ApiInfoBuilder()
+				.description("The objective of this application to successfully configure a service so that people could post and view their offers")
+				.license("LICENSE")
+				.title("OFFER MAKER")
+				.build();
+	}
 
 }

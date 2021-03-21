@@ -19,12 +19,15 @@ import com.kognitiv.offer.exception.OfferGeneratorException;
 import com.kognitiv.offer.exception.OfferInvalidException;
 import com.kognitiv.offer.service.OfferManager;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class OfferGeneratorController {
 
 	@Autowired
 	OfferManager offerManager;
 
+	@ApiOperation(value = "get offer" , notes = "Enables the user to access his pffer when it is available")
 	@GetMapping(value = "collect/offer", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public OfferResponse viewOffer() throws OfferInvalidException, OfferGeneratorException {
@@ -35,6 +38,7 @@ public class OfferGeneratorController {
 		return offerManager.getOffer(user.getUsername());
 	}
 
+	@ApiOperation(value = "post offer" , notes = "Enables the admin to post offers to the user")
 	@PostMapping("collect/offer")
 	public String insertOffer(@RequestBody OfferRequest request, HttpServletResponse response)
 			throws OfferInvalidException {
