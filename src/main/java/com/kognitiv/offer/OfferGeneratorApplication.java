@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import com.kognitiv.offer.entity.Users;
 import com.kognitiv.offer.repository.UserRepository;
 
+
 @EnableScheduling
 @SpringBootApplication
 @EnableCaching

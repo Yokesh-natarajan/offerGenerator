@@ -41,7 +41,7 @@ public class OfferManager {
 		Optional<Users> loggedIn = userRepo.findByUsername(username);
 		LOG.info("user is :: {}" , loggedIn.get().getUsername());
 		
-		// Assuming the user must exist since this is a prototype
+		// Assuming the user must exist since this is a prototype and in-mem db.
 		if (loggedIn.get().getOfferId() == null) {
 			throw new OfferGeneratorException(ErrorConstants.OFFER_NOT_FOUND);
 		}
