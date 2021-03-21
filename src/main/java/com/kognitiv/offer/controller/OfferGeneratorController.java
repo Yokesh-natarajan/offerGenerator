@@ -26,7 +26,7 @@ public class OfferGeneratorController {
 	OfferManager offerManager;
 
 	@GetMapping(value = "collect/offer", produces = { MediaType.APPLICATION_JSON_VALUE,
-			MediaType.APPLICATION_XML_VALUE , MediaType.TEXT_XML_VALUE })
+			MediaType.APPLICATION_XML_VALUE })
 	public OfferResponse viewOffer() throws OfferInvalidException, OfferGeneratorException {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (user.getUsername().equalsIgnoreCase("ADMIN")) {

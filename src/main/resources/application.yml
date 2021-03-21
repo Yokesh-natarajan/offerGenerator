@@ -13,8 +13,12 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     
 server:
+  tomcat:
+    connection-timeout: 30s
   servlet:
     session:
-      timeout: 1
+      cookie:
+        max-age: 6s
+      timeout: 30s
     context-path: /
   port: 8080

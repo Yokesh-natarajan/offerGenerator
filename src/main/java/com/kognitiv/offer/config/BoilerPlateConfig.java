@@ -8,18 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-@EnableSwagger2
 @EnableWebSecurity
 public class BoilerPlateConfig extends WebSecurityConfigurerAdapter{
 
@@ -30,15 +22,6 @@ public class BoilerPlateConfig extends WebSecurityConfigurerAdapter{
 				.setConnectTimeout(Duration.ofMillis(5000))
 				.build();
 	}
-	
-	@Bean
-    public Docket api() { 
-        return new Docket(DocumentationType.SWAGGER_2)  
-          .select()                                  
-          .apis(RequestHandlerSelectors.any())              
-          .paths(PathSelectors.ant("/collect/offer*"))                          
-          .build();                                           
-    }
 	
 	@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -59,22 +42,17 @@ public class BoilerPlateConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
           .authorizeRequests()
-          .antMatchers("/collect/offer*")
+          .antMatchers("/collect/offer")
           .authenticated()
           .and()
           .httpBasic()
-          .and()
-          .sessionManagement()
-          .maximumSessions(1)
-          .maxSessionsPreventsLogin(true)
-          .and()
           .and()
           .logout()
           .invalidateHttpSession(true)
           .deleteCookies("JSESSIONID")
           .and()
           .authorizeRequests()
-          .antMatchers("/v2/api-docs")
+          .antMatchers("/v2/api-docs" , "/swagger-ui.html")
           .permitAll();
     }
 

@@ -94,7 +94,7 @@ public class OfferManager {
 				throw new OfferInvalidException(ErrorConstants.USER_NOT_PRESENT);
 			}
 		} catch (OfferInvalidException ie) {
-			LOG.error("the user does not exist || nultiple exists :: {}", ie.getMessage());
+			LOG.error("the user does not exist || multiple exists :: {}", ie.getMessage());
 			throw ie;
 		} catch (OfferGeneratorRuntimeException e) {
 			LOG.error("Exception occured while trying to input offer into db :: {}", request.getOffer().getName(), e);
