@@ -2,16 +2,28 @@ package com.kognitiv.offer.beans;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 public class OfferResponse {
 	
+	@XmlElement
 	private String id;
 	
+	@XmlElement
 	private String name;
 	
+	@XmlElement
 	private Date validFrom;
 	
+	@XmlElement
 	private Date validTo;
 	
+	@XmlElement
 	private String location;
 	
 	public String getId() {

@@ -1,11 +1,21 @@
 package com.kognitiv.offer.beans;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ErrorBean {
 	
+	@XmlElement
 	private String message;
 	
+	@XmlElement
 	private String code;
 	
+	@XmlElement
 	private String meta;
 
 	public String getMessage() {
